@@ -1,0 +1,1 @@
+# squads-transfo-cloud
