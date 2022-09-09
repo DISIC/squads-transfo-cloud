@@ -1,12 +1,28 @@
 #!/bin/bash
-sudo apt update -y
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+wget https://releases.mattermost.com/5.19.0/mattermost-5.19.0-linux-amd64.tar.gz
+echo "Downloaded Mattermost"
+tar -xvzf mattermost*.gz
+echo "Extracted Mattermost"
+sudo mv mattermost /opt
+sudo mkdir /opt/mattermost/data
+useradd --system --user-group mattermost
+echo "Created user"
 
-sudo apt update -y
-sudo apt install docker-ce -y
+sudo apt-get -y install curl ca-certificates gnupg
+curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+sudo apt-get update
+sudo apt -y install postgresql-client-11
+pg_basebackup -V
 
-sudo service docker start
-sudo usermod -a -G docker ec2-user
-docker run -p 8080:8080 springcommunity/spring-framework-petclinic
+sudo apt-get -y install jq
+
+jq '(.ServiceSettings.SiteURL |= "https://mattermost.example.com")' /opt/mattermost/config/config.json > "tmp.json" && mv "tmp.json" /opt/mattermost/config/config.json
+jq '(.ServiceSettings.ListenAddress |= ":8080")' /opt/mattermost/config/config.json > "tmp.json" && mv "tmp.json" /opt/mattermost/config/config.json
+jq '(.SqlSettings.DriverName |= "postgres")' /opt/mattermost/config/config.json > "tmp.json" && mv "tmp.json" /opt/mattermost/config/config.json
+jq '(.SqlSettings.DataSource |= "postgres://${db_username}:${db_password}@${db_ip_address}:${db_port}/${db_name}?sslmode=disable&connect_timeout=10")' /opt/mattermost/config/config.json > "tmp.json" && mv "tmp.json" /opt/mattermost/config/config.json
+
+sudo chown -R mattermost:mattermost /opt/mattermost
+sudo chmod -R g+w /opt/mattermost
+cd /opt/mattermost
+sudo -u mattermost ./bin/mattermost
