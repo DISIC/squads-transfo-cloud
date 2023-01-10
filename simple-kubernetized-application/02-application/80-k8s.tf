@@ -3,7 +3,7 @@
 # =============================================================================
 resource "kubernetes_namespace" "wordpress_namespace" {
   metadata { 
-    name = "wordpress" 
+    name = "wordpress-${var.environment}" 
   }
 }
 

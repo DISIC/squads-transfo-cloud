@@ -1,0 +1,21 @@
+######## Install Chocolatey with Non Admin Rights ########
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\ChocolateyInstallNonAdmin.ps1
+choco # Verify Chocolatey is correctly installed
+
+
+
+########### Install Terraform using chocolatey ###########
+choco install terraform --version=1.2.6
+terraform --version # Verify Terraform is correctly installed
+
+
+
+############## Install Git using chocolatey ##############
+choco install git
+git --version       # Verify Git is correctly installed
+
+
+
+################## Generate SSH keypair ##################
+ssh-keygen -t ed25519
