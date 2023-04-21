@@ -1,5 +1,5 @@
-bucket                      = ""  // change with your bucket name
-key                         = "module-2/terraform.tfstate"
+bucket                      = "formation-terraform-mef-tfstates"  // change with your bucket name
+key                         = "module-2/ebenchekroun/terraform.tfstate"
 region                      = "fr-par"
 endpoint                    = "https://s3.fr-par.scw.cloud"
 skip_credentials_validation = true

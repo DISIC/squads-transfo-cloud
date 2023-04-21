@@ -1,0 +1,7 @@
+cloud             = "ovh-test"
+container         = "default-dev_tfstate"
+archive_container = "default-dev_tfstate_archive"
+state_name        = "terraform-prod.tfstate"
+auth_url          = "https://auth.cloud.ovh.net/v3/"
+region_name       = "GRA11"
+endpoint_type     = "public"

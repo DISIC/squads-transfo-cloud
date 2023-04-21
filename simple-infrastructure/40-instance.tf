@@ -7,7 +7,7 @@ resource "scaleway_instance_security_group" "scaleway_instance_sg" {
 
   inbound_rule {
     action = "accept"
-    port   = "22"
+    port   = 22
   }
 
   inbound_rule {

@@ -1,0 +1,39 @@
+## MariaDB chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## Enable in-chart MariaDB
+mariadb:
+  enabled: true
+  architecture: replication
+  ## MariaDB Authentication parameters
+  ## @param mariadb.auth.database MariaDB custom database
+  ## @param mariadb.auth.username MariaDB custom user name
+  ## @param mariadb.auth.forcePassword Force users to specify required passwords
+  ## @param auth.existingSecret Use existing secret for password details 
+  ##      (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). 
+  ##       The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password`
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
+  ##
+  auth:
+    database: ${mariadb_database}
+    username: ${mariadb_user}
+    replicationUser: replicator
+    forcePassword: false
+    existingSecret: ${mariadb_secret_name}
+  ## MariaDB Primary configuration
+  ##
+  primary:
+    ## MariaDB Primary Persistence parameters
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
+    ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
+    ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
+    ## @param mariadb.primary.persistence.size Persistent Volume size
+    ##
+    persistence:
+      enabled: true
+      storageClass: ""
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi

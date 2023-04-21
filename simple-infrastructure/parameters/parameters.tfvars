@@ -1,4 +1,4 @@
-project_id  = "" // change with your project ID
+project_id  = "aec14e7d-5bb9-42e6-aedc-70a6ba3f5a7a" // change with your project ID
 region      = "fr-par"
 zone        = "fr-par-1"
 environment = "dev"

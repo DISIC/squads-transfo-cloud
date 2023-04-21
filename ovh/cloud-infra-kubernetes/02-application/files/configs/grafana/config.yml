@@ -1,0 +1,238 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param nameOverride String to partially override grafana.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override grafana.fullname template
+##
+fullnameOverride: ""
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## @section Grafana parameters
+
+## Bitnami Grafana image version
+## ref: https://hub.docker.com/r/bitnami/grafana/tags/
+## @param image.registry Grafana image registry
+## @param image.repository Grafana image repository
+## @param image.tag Grafana image tag (immutable tags are recommended)
+## @param image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Grafana image pull policy
+## @param image.pullSecrets Grafana image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/grafana
+  tag: 9.2.3-debian-11-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  pullSecrets: []
+## Admin credentials configuration
+##
+admin:
+  ## @param admin.user Grafana admin username
+  ##
+  user: "admin"
+  ## @param admin.password Admin password. If a password is not provided a random password will be generated
+  ##
+  password: ""
+  ## @param admin.existingSecret Name of the existing secret containing admin password
+  ##
+  existingSecret: ""
+  ## @param admin.existingSecretPasswordKey Password key on the existing secret
+  ##
+  existingSecretPasswordKey: password
+## SMTP configuration
+##
+smtp:
+  ## @param smtp.enabled Enable SMTP configuration
+  ##
+  enabled: false
+  ## @param smtp.user SMTP user
+  ##
+  user: user
+  ## @param smtp.password SMTP password
+  ##
+  password: password
+  ## @param smtp.host Custom host for the smtp server
+  ## e.g:
+  ##   host: mysmtphost.com
+  ##
+  host: ""
+  ## @param smtp.fromAddress From address
+  ##
+  fromAddress: ""
+  ## @param smtp.fromName From name
+  ##
+  fromName: ""
+  ## @param smtp.skipVerify Enable skip verify
+  ##
+  skipVerify: "false"
+  ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
+  ##
+  existingSecret: ""
+  ## @param smtp.existingSecretUserKey User key on the existing secret
+  ##
+  existingSecretUserKey: user
+  ## @param smtp.existingSecretPasswordKey Password key on the existing secret
+  ##
+  existingSecretPasswordKey: password
+## @param plugins Grafana plugins to be installed in deployment time separated by commas
+## Specify plugins as a list separated by commas ( you will need to scape them when specifying from command line )
+## Example:
+## plugins: grafana-kubernetes-app,grafana-example-app
+##
+plugins: ""
+## Ldap configuration for Grafana
+##
+ldap:
+  ## @param ldap.enabled Enable LDAP for Grafana
+  ##
+  enabled: false
+  ## @param ldap.allowSignUp Allows LDAP sign up for Grafana
+  ##
+  allowSignUp: false
+  ## @param ldap.configuration Specify content for ldap.toml configuration file
+  ## e.g:
+  ## configuration: |-
+  ##   [[servers]]
+  ##   host = "127.0.0.1"
+  ##   port = 389
+  ##   use_ssl = false
+  ##   ...
+  ##
+  configuration: ""
+  ## @param ldap.configMapName Name of the ConfigMap with the ldap.toml configuration file for Grafana
+  ## NOTE: When it's set the ldap.configuration parameter is ignored
+  ##
+  configMapName: ""
+  ## @param ldap.secretName Name of the Secret with the ldap.toml configuration file for Grafana
+  ## NOTE: When it's set the ldap.configuration parameter is ignored
+  ##
+  secretName: ""
+  ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
+  ##
+  uri: ""
+  ## @param ldap.binddn DN of the account used to search in the LDAP server.
+  ##
+  binddn: ""
+  ## @param ldap.bindpw Password for binddn account.
+  ##
+  bindpw: ""
+  ## @param ldap.basedn Base DN path where binddn account will search for the users.
+  ##
+  basedn: ""
+  ## @param ldap.searchAttribute Field used to match with the user name (uid, samAccountName, cn, etc). This value will be ignored if 'ldap.searchFilter' is set
+  ##
+  searchAttribute: "uid"
+  ## @param ldap.searchFilter User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(|(sAMAccountName=%s)(userPrincipalName=%s)"
+  ##
+  searchFilter: ""
+  ## @param ldap.extraConfiguration Extra ldap configuration.
+  ## Example:
+  ##   extraConfiguration: |-
+  ##     # set to true if you want to skip SSL cert validation
+  ##     ssl_skip_verify = false
+  ##     # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+  ##     # group_search_filter_user_attribute = "distinguishedName"
+  ##     # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+  ##     # Specify names of the LDAP attributes your LDAP uses
+  ##     [servers.attributes]
+  ##     # member_of = "memberOf"
+  ##     # email =  "email"
+  ##
+  extraConfiguration: ""
+  ## @param ldap.tls.enabled Enabled TLS configuration.
+  ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
+  ## @param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
+  ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
+  ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
+  ## @param ldap.tls.CAFilename  CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.
+  ## @param ldap.tls.certFilename Client certificate filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.
+  ## @param ldap.tls.certKeyFilename Client Key filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.
+  ##
+  tls:
+    enabled: false
+    startTls: false
+    skipVerify: false
+    certificatesMountPath: /opt/bitnami/grafana/conf/ldap/
+    certificatesSecret: ""
+    CAFilename: ""
+    certFilename: ""
+    certKeyFilename: ""
+
+## Parameters to override the default grafana.ini file.
+## It is needed to create a configmap or a secret containing the grafana.ini file.
+## @param config.useGrafanaIniFile Allows to load a `grafana.ini` file
+## @param config.grafanaIniConfigMap Name of the ConfigMap containing the `grafana.ini` file
+## @param config.grafanaIniSecret Name of the Secret containing the `grafana.ini` file
+##
+config:
+  useGrafanaIniFile: false
+  grafanaIniConfigMap: ""
+  grafanaIniSecret: ""
+## Create dasboard provider to load dashboards, a default one is created to load dashboards
+## from "/opt/bitnami/grafana/dashboards"
+## @param dashboardsProvider.enabled Enable the use of a Grafana dashboard provider
+## @param dashboardsProvider.configMapName Name of a ConfigMap containing a custom dashboard provider
+##
+dashboardsProvider:
+  enabled: false
+  ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
+  ## Evaluated as a template.
+  ##
+  configMapName: ""
+## @param dashboardsConfigMaps Array with the names of a series of ConfigMaps containing dashboards files
+## They will be mounted by the default dashboard provider if it is enabled
+## Use an array with the configMap names.
+## In order to use subfolders, uncomment "#foldersFromFilesStructure: true" line in default provider config. or create your own dashboard provider.
+## Example:
+## dashboardsConfigMaps:
+##   - configMapName: mydashboard
+##     folderName: foo
+##     fileName: mydashboard.json
+##   - configMapName: myotherdashboard
+##     folderName: bar
+##     fileName: myotherdashboard.json
+##
