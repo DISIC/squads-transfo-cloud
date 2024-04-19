@@ -1,0 +1,1 @@
+flavor_name = "d2-2"
