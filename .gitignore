@@ -8,3 +8,5 @@
 # .pub and pem files
 *.pub
 *.pem
+# kubeconfig files
+*.kubeconfig
