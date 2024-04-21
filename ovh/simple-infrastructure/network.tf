@@ -41,10 +41,3 @@ resource "openstack_networking_router_interface_v2" "router_interface_public" {
 resource "openstack_networking_floatingip_v2" "front_fip" {
   pool = "Ext-Net"
 }
-
-resource "openstack_networking_floatingip_associate_v2" "associate_fixed_appli_floating_ip" {
-  floating_ip = openstack_networking_floatingip_v2.front_fip.address
-  port_id     = openstack_networking_port_v2.port.id
-
-  depends_on = [ openstack_networking_router_interface_v2.router_interface_public ]
-}

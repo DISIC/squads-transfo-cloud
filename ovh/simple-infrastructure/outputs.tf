@@ -5,3 +5,7 @@ output "public_ip" {
 output "private_ip" {
   value = openstack_compute_instance_v2.instance.network.0.fixed_ip_v4
 }
+
+output "private_ip_db" {
+  value = openstack_compute_instance_v2.instance_db.network.0.fixed_ip_v4
+}

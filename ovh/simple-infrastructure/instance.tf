@@ -15,10 +15,17 @@ resource "openstack_networking_port_v2" "port" {
   security_group_ids = [openstack_networking_secgroup_v2.front_secgroup.id]
 }
 
+resource "openstack_networking_floatingip_associate_v2" "associate_fixed_appli_floating_ip" {
+  floating_ip = openstack_networking_floatingip_v2.front_fip.address
+  port_id     = openstack_networking_port_v2.port.id
+
+  depends_on = [ openstack_networking_router_interface_v2.router_interface_public ]
+}
+
 resource "openstack_compute_instance_v2" "instance" {
   name        = "instance"
   image_id    = data.openstack_images_image_v2.ubuntu.id
-  flavor_name = "d2-2"
+  flavor_name = var.flavor_name
   key_pair    = openstack_compute_keypair_v2.main_ssh_key.name
 
   block_device {
